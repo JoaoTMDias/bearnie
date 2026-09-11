@@ -92,6 +92,32 @@ const classes = cn('w-full', className);
 
         trigger.setAttribute('aria-controls', content.id);
         content.setAttribute('aria-labelledby', trigger.id);
+
+        const labels = Array.from(trigger.querySelectorAll('[data-accordion-label]'));
+        labels.forEach((label) => {
+          if (!label.id) label.id = generateId('accordion-label');
+        });
+        const descriptions = Array.from(
+          trigger.querySelectorAll('[data-accordion-description]')
+        );
+        descriptions.forEach((description) => {
+          if (!description.id) description.id = generateId('accordion-description');
+        });
+
+        if (
+          !trigger.hasAttribute('aria-label') &&
+          !trigger.hasAttribute('aria-labelledby') &&
+          labels.length > 0
+        ) {
+          trigger.setAttribute('aria-labelledby', labels.map((label) => label.id).join(' '));
+        }
+
+        if (!trigger.hasAttribute('aria-describedby') && descriptions.length > 0) {
+          trigger.setAttribute(
+            'aria-describedby',
+            descriptions.map((description) => description.id).join(' '),
+          );
+        }
       });
 
       // Only select triggers that belong directly to this accordion
