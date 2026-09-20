@@ -3,7 +3,9 @@
 
 export { default as Accordion } from "./accordion/Accordion.astro";
 export { default as AccordionContent } from "./accordion/AccordionContent.astro";
+export { default as AccordionDescription } from "./accordion/AccordionDescription.astro";
 export { default as AccordionItem } from "./accordion/AccordionItem.astro";
+export { default as AccordionLabel } from "./accordion/AccordionLabel.astro";
 export { default as AccordionTrigger } from "./accordion/AccordionTrigger.astro";
 
 export { default as Alert } from "./alert/Alert.astro";

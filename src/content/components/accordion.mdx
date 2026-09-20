@@ -14,7 +14,9 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import CodeBlock from "@/components/docs/CodeBlock.astro";
 import Prose from "@/components/docs/Prose.astro";
 import Accordion from "@/components/ui/accordion/Accordion.astro";
+import AccordionDescription from "@/components/ui/accordion/AccordionDescription.astro";
 import AccordionItem from "@/components/ui/accordion/AccordionItem.astro";
+import AccordionLabel from "@/components/ui/accordion/AccordionLabel.astro";
 import AccordionTrigger from "@/components/ui/accordion/AccordionTrigger.astro";
 import AccordionContent from "@/components/ui/accordion/AccordionContent.astro";
 import Badge from "@/components/ui/badge/Badge.astro";
@@ -237,6 +239,8 @@ Add icons to accordion triggers to provide visual context for each section.
 #### With Description
 
 Add a subtitle or description below the main trigger text for additional context.
+
+Use `AccordionLabel` for the main trigger text and `AccordionDescription` for the supporting text. The components also provide the appropriate accessible name and description for the trigger.
 </Prose>
 
 <ComponentPreview>
@@ -246,10 +250,10 @@ Add a subtitle or description below the main trigger text for additional context
   <AccordionItem value="account">
     <AccordionTrigger>
       <div class="flex flex-col items-start gap-1">
-        <span>Account</span>
-        <span class="text-sm text-muted-foreground font-normal">
-          Manage your account Settings01Icon
-        </span>
+        <AccordionLabel>Account</AccordionLabel>
+        <AccordionDescription>
+          Manage your account settings
+        </AccordionDescription>
       </div>
     </AccordionTrigger>
     <AccordionContent>
@@ -259,10 +263,10 @@ Add a subtitle or description below the main trigger text for additional context
   <AccordionItem value="privacy">
     <AccordionTrigger>
       <div class="flex flex-col items-start gap-1">
-        <span>Privacy</span>
-        <span class="text-sm text-muted-foreground font-normal">
+        <AccordionLabel>Privacy</AccordionLabel>
+        <AccordionDescription>
           Control your privacy preferences
-        </span>
+        </AccordionDescription>
       </div>
     </AccordionTrigger>
     <AccordionContent>
@@ -272,10 +276,10 @@ Add a subtitle or description below the main trigger text for additional context
   <AccordionItem value="security">
     <AccordionTrigger>
       <div class="flex flex-col items-start gap-1">
-        <span>Security</span>
-        <span class="text-sm text-muted-foreground font-normal">
+        <AccordionLabel>Security</AccordionLabel>
+        <AccordionDescription>
           Protect your account
-        </span>
+        </AccordionDescription>
       </div>
     </AccordionTrigger>
     <AccordionContent>
@@ -289,10 +293,10 @@ Add a subtitle or description below the main trigger text for additional context
     <AccordionItem value="account">
       <AccordionTrigger>
         <div class="flex flex-col items-start gap-1">
-          <span>Account</span>
-          <span class="text-sm text-muted-foreground font-normal">
-            Manage your account Settings01Icon
-          </span>
+          <AccordionLabel>Account</AccordionLabel>
+          <AccordionDescription>
+            Manage your account settings
+          </AccordionDescription>
         </div>
       </AccordionTrigger>
       <AccordionContent>
@@ -302,10 +306,10 @@ Add a subtitle or description below the main trigger text for additional context
     <AccordionItem value="privacy">
       <AccordionTrigger>
         <div class="flex flex-col items-start gap-1">
-          <span>Privacy</span>
-          <span class="text-sm text-muted-foreground font-normal">
+          <AccordionLabel>Privacy</AccordionLabel>
+          <AccordionDescription>
             Control your privacy preferences
-          </span>
+          </AccordionDescription>
         </div>
       </AccordionTrigger>
       <AccordionContent>
@@ -315,10 +319,10 @@ Add a subtitle or description below the main trigger text for additional context
     <AccordionItem value="security">
       <AccordionTrigger>
         <div class="flex flex-col items-start gap-1">
-          <span>Security</span>
-          <span class="text-sm text-muted-foreground font-normal">
+          <AccordionLabel>Security</AccordionLabel>
+          <AccordionDescription>
             Protect your account
-          </span>
+          </AccordionDescription>
         </div>
       </AccordionTrigger>
       <AccordionContent>
@@ -345,10 +349,10 @@ Combine icons with descriptions for a rich, informative accordion header.
       <div class="flex items-start gap-3">
         <HugeIcon icon={UserIcon} class="size-5 mt-0.5 text-muted-foreground" />
         <div class="flex flex-col items-start gap-1">
-          <span>Profile</span>
-          <span class="text-sm text-muted-foreground font-normal">
+          <AccordionLabel>Profile</AccordionLabel>
+          <AccordionDescription>
             Your personal information
-          </span>
+          </AccordionDescription>
         </div>
       </div>
     </AccordionTrigger>
@@ -361,10 +365,10 @@ Combine icons with descriptions for a rich, informative accordion header.
       <div class="flex items-start gap-3">
         <HugeIcon icon={Shield01Icon} class="size-5 mt-0.5 text-muted-foreground" />
         <div class="flex flex-col items-start gap-1">
-          <span>Security</span>
-          <span class="text-sm text-muted-foreground font-normal">
+          <AccordionLabel>Security</AccordionLabel>
+          <AccordionDescription>
             Password and authentication
-          </span>
+          </AccordionDescription>
         </div>
       </div>
     </AccordionTrigger>
@@ -377,10 +381,10 @@ Combine icons with descriptions for a rich, informative accordion header.
       <div class="flex items-start gap-3">
         <HugeIcon icon={Notification01Icon} class="size-5 mt-0.5 text-muted-foreground" />
         <div class="flex flex-col items-start gap-1">
-          <span>Notifications</span>
-          <span class="text-sm text-muted-foreground font-normal">
+          <AccordionLabel>Notifications</AccordionLabel>
+          <AccordionDescription>
             Email and push alerts
-          </span>
+          </AccordionDescription>
         </div>
       </div>
     </AccordionTrigger>
@@ -397,10 +401,10 @@ Combine icons with descriptions for a rich, informative accordion header.
         <div class="flex items-start gap-3">
           <HugeIcon icon={UserIcon} class="size-5 mt-0.5 text-muted-foreground" />
           <div class="flex flex-col items-start gap-1">
-            <span>Profile</span>
-            <span class="text-sm text-muted-foreground font-normal">
+            <AccordionLabel>Profile</AccordionLabel>
+            <AccordionDescription>
               Your personal information
-            </span>
+            </AccordionDescription>
           </div>
         </div>
       </AccordionTrigger>
@@ -413,10 +417,10 @@ Combine icons with descriptions for a rich, informative accordion header.
         <div class="flex items-start gap-3">
           <HugeIcon icon={Shield01Icon} class="size-5 mt-0.5 text-muted-foreground" />
           <div class="flex flex-col items-start gap-1">
-            <span>Security</span>
-            <span class="text-sm text-muted-foreground font-normal">
+            <AccordionLabel>Security</AccordionLabel>
+            <AccordionDescription>
               Password and authentication
-            </span>
+            </AccordionDescription>
           </div>
         </div>
       </AccordionTrigger>
@@ -429,10 +433,10 @@ Combine icons with descriptions for a rich, informative accordion header.
         <div class="flex items-start gap-3">
           <HugeIcon icon={Notification01Icon} class="size-5 mt-0.5 text-muted-foreground" />
           <div class="flex flex-col items-start gap-1">
-            <span>Notifications</span>
-            <span class="text-sm text-muted-foreground font-normal">
+            <AccordionLabel>Notifications</AccordionLabel>
+            <AccordionDescription>
               Email and push alerts
-            </span>
+            </AccordionDescription>
           </div>
         </div>
       </AccordionTrigger>
@@ -804,7 +808,7 @@ Style accordion items as separate cards with rounded corners and background.
   <AccordionItem value="item-2" class="border rounded-lg px-4">
     <AccordionTrigger>Configuration</AccordionTrigger>
     <AccordionContent>
-      Learn how to customize Settings01Icon to fit your needs.
+      Learn how to customize the accordion to fit your needs.
     </AccordionContent>
   </AccordionItem>
   <AccordionItem value="item-3" class="border rounded-lg px-4">
@@ -826,7 +830,7 @@ Style accordion items as separate cards with rounded corners and background.
     <AccordionItem value="item-2" class="border rounded-lg px-4">
       <AccordionTrigger>Configuration</AccordionTrigger>
       <AccordionContent>
-        Learn how to customize Settings01Icon to fit your needs.
+        Learn how to customize the accordion to fit your needs.
       </AccordionContent>
     </AccordionItem>
     <AccordionItem value="item-3" class="border rounded-lg px-4">
@@ -846,6 +850,8 @@ Style accordion items as separate cards with rounded corners and background.
 - `Accordion` - The root container that manages state
 - `AccordionItem` - Individual collapsible section wrapper
 - `AccordionTrigger` - The clickable header that toggles content
+- `AccordionLabel` - The primary accessible label for the trigger
+- `AccordionDescription` - Supporting accessible description for the trigger
 - `AccordionContent` - The expandable content panel
 </Prose>
 
@@ -870,6 +876,13 @@ Style accordion items as separate cards with rounded corners and background.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| class | string | - | Additional CSS classes |
+
+#### AccordionLabel / AccordionDescription
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| id | string | generated | Optional ID used by the automatic ARIA relationship |
 | class | string | - | Additional CSS classes |
 
 #### AccordionContent
