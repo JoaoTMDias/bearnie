@@ -17,13 +17,19 @@ export interface Props {
   component?: string;
   // Full width preview without padding/max-width (for sidebars, etc.)
   fullWidth?: boolean;
-  // Additional custom classes for the component preview container
-  class?: string;
   // Unique ID for the component preview container
   id?: string;
+  class?: string;
 }
 
-const { code, displayCode, component, fullWidth = false, class: className, id } = Astro.props;
+const {
+  code,
+  displayCode,
+  component,
+  fullWidth = false,
+  id,
+  class: className,
+} = Astro.props;
 
 // Determine mode based on props
 const isInstallMode = !!component;
@@ -79,7 +85,9 @@ function normalizeCode(value: string) {
     .filter((line) => line.trim().length > 0)
     .map((line) => line.match(/^\s+/)?.[0].length ?? 0);
   const minIndent = indents.length ? Math.min(...indents) : 0;
-  return lines.map((line) => line.slice(minIndent).replace(/\s+$/g, "")).join("\n");
+  return lines
+    .map((line) => line.slice(minIndent).replace(/\s+$/g, ""))
+    .join("\n");
 }
 
 // Priority: displayCode > codeFromSlot > code prop
@@ -191,14 +199,14 @@ const normalizedCode = displayCode
           <div
             class={cn(
               "min-h-30 rounded-lg overflow-x-auto lg:overflow-visible border",
-              fullWidth ? "p-0" : "p-8 lg:p-20"
+              fullWidth ? "p-0" : "p-8 lg:p-20",
             )}
             data-preview-panel="preview"
           >
             <div
               class={cn(
                 "flex items-center justify-center w-max min-w-full",
-                !fullWidth && "max-w-lg mx-auto"
+                !fullWidth && "max-w-lg mx-auto",
               )}
             >
               <slot />
@@ -227,135 +235,144 @@ const normalizedCode = displayCode
 
 <script>
   function initComponentPreviews() {
-    document.querySelectorAll("[data-component-preview]").forEach((container) => {
-      if (container.hasAttribute("data-initialized")) return;
-      container.setAttribute("data-initialized", "true");
+    document
+      .querySelectorAll("[data-component-preview]")
+      .forEach((container) => {
+        if (container.hasAttribute("data-initialized")) return;
+        container.setAttribute("data-initialized", "true");
 
-      const tabs = container.querySelectorAll("[data-preview-tab]");
-      const panels = container.querySelectorAll("[data-preview-panel]");
-      const pmTabs = container.querySelectorAll("[data-pm-tab]");
-      const pmPanels = container.querySelectorAll("[data-pm-panel]");
-      const copyButtons = container.querySelectorAll("[data-copy-button]");
+        const tabs = container.querySelectorAll("[data-preview-tab]");
+        const panels = container.querySelectorAll("[data-preview-panel]");
+        const pmTabs = container.querySelectorAll("[data-pm-tab]");
+        const pmPanels = container.querySelectorAll("[data-pm-panel]");
+        const copyButtons = container.querySelectorAll("[data-copy-button]");
 
-      // Main tab switching (CLI/Manual or Preview/Code)
-      function setActiveTab(activeValue: string) {
-        tabs.forEach((tab) => {
-          if (tab.getAttribute("data-preview-tab") === activeValue) {
-            tab.setAttribute("data-active", "");
-          } else {
-            tab.removeAttribute("data-active");
-          }
-        });
-
-        panels.forEach((panel) => {
-          if (panel.getAttribute("data-preview-panel") === activeValue) {
-            panel.classList.remove("hidden");
-          } else {
-            panel.classList.add("hidden");
-          }
-        });
-      }
-
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const value = tab.getAttribute("data-preview-tab");
-          if (value) setActiveTab(value);
-        });
-      });
-
-      // Package manager sub-tab switching
-      function setActivePmTab(activeValue: string) {
-        pmTabs.forEach((tab) => {
-          if (tab.getAttribute("data-pm-tab") === activeValue) {
-            tab.setAttribute("data-active", "");
-          } else {
-            tab.removeAttribute("data-active");
-          }
-        });
-
-        pmPanels.forEach((panel) => {
-          if (panel.getAttribute("data-pm-panel") === activeValue) {
-            panel.classList.remove("hidden");
-          } else {
-            panel.classList.add("hidden");
-          }
-        });
-      }
-
-      // Apply stored preference on init (sync with other blocks on page)
-      const PM_STORAGE_KEY = "bearnie-pm";
-      if (pmTabs.length > 0) {
-        try {
-          const stored = sessionStorage.getItem(PM_STORAGE_KEY);
-          if (stored && Array.from(pmTabs).some((t) => t.getAttribute("data-pm-tab") === stored)) {
-            setActivePmTab(stored);
-          }
-        } catch (_) {}
-      }
-
-      pmTabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const value = tab.getAttribute("data-pm-tab");
-          if (value) {
-            setActivePmTab(value);
-            try {
-              sessionStorage.setItem(PM_STORAGE_KEY, value);
-              document.dispatchEvent(new CustomEvent("bearnie-pm-change", { detail: value }));
-            } catch (_) {}
-          }
-        });
-      });
-
-      // Sync when user selects a PM in another block on the page
-      if (pmTabs.length > 0) {
-        document.addEventListener("bearnie-pm-change", (e: Event) => {
-          const value = (e as CustomEvent<string>).detail;
-          if (Array.from(pmTabs).some((t) => t.getAttribute("data-pm-tab") === value)) {
-            setActivePmTab(value);
-          }
-        });
-      }
-
-      // Copy functionality
-      copyButtons.forEach((copyButton) => {
-        const copyIcon = copyButton.querySelector("[data-copy-icon]");
-        const checkIcon = copyButton.querySelector("[data-check-icon]");
-
-        copyButton.addEventListener("click", async () => {
-          // Find the visible code content relative to this button
-          const panel = copyButton.closest("[data-preview-panel]");
-          let codeContent: Element | null = null;
-
-          if (panel) {
-            // Check for visible PM panel first
-            const visiblePmPanel = panel.querySelector("[data-pm-panel]:not(.hidden)");
-            if (visiblePmPanel) {
-              codeContent = visiblePmPanel.querySelector("[data-code-content]");
+        // Main tab switching (CLI/Manual or Preview/Code)
+        function setActiveTab(activeValue: string) {
+          tabs.forEach((tab) => {
+            if (tab.getAttribute("data-preview-tab") === activeValue) {
+              tab.setAttribute("data-active", "");
             } else {
-              codeContent = panel.querySelector("[data-code-content]");
+              tab.removeAttribute("data-active");
             }
-          } else {
-            // Fallback for code panel in preview mode
-            const activePanel = container.querySelector("[data-preview-panel]:not(.hidden)");
-            codeContent = activePanel?.querySelector("[data-code-content]") || null;
-          }
+          });
 
-          const code = codeContent?.textContent || "";
+          panels.forEach((panel) => {
+            if (panel.getAttribute("data-preview-panel") === activeValue) {
+              panel.classList.remove("hidden");
+            } else {
+              panel.classList.add("hidden");
+            }
+          });
+        }
 
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const value = tab.getAttribute("data-preview-tab");
+            if (value) setActiveTab(value);
+          });
+        });
+
+        // Package manager sub-tab switching
+        function setActivePmTab(activeValue: string) {
+          pmTabs.forEach((tab) => {
+            if (tab.getAttribute("data-pm-tab") === activeValue) {
+              tab.setAttribute("data-active", "");
+            } else {
+              tab.removeAttribute("data-active");
+            }
+          });
+
+          pmPanels.forEach((panel) => {
+            if (panel.getAttribute("data-pm-panel") === activeValue) {
+              panel.classList.remove("hidden");
+            } else {
+              panel.classList.add("hidden");
+            }
+          });
+        }
+
+        // Apply stored preference on init (sync with other blocks on page)
+        const PM_STORAGE_KEY = "bearnie-pm";
+        if (pmTabs.length > 0) {
           try {
-            await navigator.clipboard.writeText(code);
-            copyIcon?.classList.add("hidden");
-            checkIcon?.classList.remove("hidden");
-            setTimeout(() => {
-              copyIcon?.classList.remove("hidden");
-              checkIcon?.classList.add("hidden");
-            }, 2000);
-          } catch (err) {
-            console.error("Failed to copy:", err);
-          }
+            const stored = sessionStorage.getItem(PM_STORAGE_KEY);
+            if (stored && Array.from(pmTabs).some((t) => t.getAttribute("data-pm-tab") === stored)) {
+              setActivePmTab(stored);
+            }
+          } catch (_) {}
+        }
+
+        pmTabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const value = tab.getAttribute("data-pm-tab");
+            if (value) {
+              setActivePmTab(value);
+              try {
+                sessionStorage.setItem(PM_STORAGE_KEY, value);
+                document.dispatchEvent(new CustomEvent("bearnie-pm-change", { detail: value }));
+              } catch (_) {}
+            }
+          });
+        });
+
+        // Sync when user selects a PM in another block on the page
+        if (pmTabs.length > 0) {
+          document.addEventListener("bearnie-pm-change", (e: Event) => {
+            const value = (e as CustomEvent<string>).detail;
+            if (Array.from(pmTabs).some((t) => t.getAttribute("data-pm-tab") === value)) {
+              setActivePmTab(value);
+            }
+          });
+        }
+
+        // Copy functionality
+        copyButtons.forEach((copyButton) => {
+          const copyIcon = copyButton.querySelector("[data-copy-icon]");
+          const checkIcon = copyButton.querySelector("[data-check-icon]");
+
+          copyButton.addEventListener("click", async () => {
+            // Find the visible code content relative to this button
+            const panel = copyButton.closest("[data-preview-panel]");
+            let codeContent: Element | null = null;
+
+            if (panel) {
+              // Check for visible PM panel first
+              const visiblePmPanel = panel.querySelector(
+                "[data-pm-panel]:not(.hidden)",
+              );
+              if (visiblePmPanel) {
+                codeContent = visiblePmPanel.querySelector(
+                  "[data-code-content]",
+                );
+              } else {
+                codeContent = panel.querySelector("[data-code-content]");
+              }
+            } else {
+              // Fallback for code panel in preview mode
+              const activePanel = container.querySelector(
+                "[data-preview-panel]:not(.hidden)",
+              );
+              codeContent =
+                activePanel?.querySelector("[data-code-content]") || null;
+            }
+
+            const code = codeContent?.textContent || "";
+
+            try {
+              await navigator.clipboard.writeText(code);
+              copyIcon?.classList.add("hidden");
+              checkIcon?.classList.remove("hidden");
+              setTimeout(() => {
+                copyIcon?.classList.remove("hidden");
+                checkIcon?.classList.add("hidden");
+              }, 2000);
+            } catch (err) {
+              console.error("Failed to copy:", err);
+            }
+          });
         });
       });
-    });
   }
 
   initComponentPreviews();
