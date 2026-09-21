@@ -109,8 +109,10 @@ test.describe("Accordion", () => {
     test.describe(`${colorScheme} theme`, () => {
       test.use({ colorScheme });
 
-      test("has no automatically detectable accessibility violations", async ({ accessibility }) => {
-        const accessibilityReport = await accessibility.analyze();
+      test("has no automatically detectable accessibility violations", async ({ accessibility, componentPreview }) => {
+        const accessibilityReport = await accessibility.analyzeSelector(
+          componentPreview.selector(),
+        );
 
         expect(accessibilityReport.violations).toHaveLength(0);
       });
